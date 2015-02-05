@@ -1330,7 +1330,9 @@ dp_list(999)                 -> [999].
 get_values(Name, DataPoint) when is_list(Name) ->
     case exometer:get_value(Name, DataPoint) of
 	{ok, Values} when is_list(Values) ->
-	    [{Name, Values}];
+        TS = os:timestamp(),
+        NewVals = [{DP, {TS, Val}} || {DP, Val} <- Values],
+	    [{Name, NewVals}];
 	_ ->
 	    []
     end;
